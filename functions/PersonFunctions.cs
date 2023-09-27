@@ -1,21 +1,17 @@
-public record Person(string FirstName, string LastName, int Age);
+public record Person(int id, string FirstName, string LastName, int Age);
 
 public class PersonFunctions {
     private static readonly List<Person> peopleList = new() {
-        new Person("Ole", "Pedersen", 38),
-        new Person("Silje", "Pedersen", 36),
-        new Person("Tim", "Pedersen", 15)
+        new Person(1, "Ole", "Pedersen", 38),
+        new Person(2, "Silje", "Pedersen", 36),
+        new Person(3, "Tim", "Pedersen", 15)
     };
 
-    public static List<Person> GetPeople() {
+    public static List<Person> GetAllPeople() {
         return peopleList;
     }
 
-    public static Person? GetPerson(int i) {
-        if (peopleList.Count >= i) {
-            return peopleList[i];
-        } else {
-            return null;
-        }
+    public static Person? GetOnePerson(int id) {
+        return peopleList.SingleOrDefault(res => res.id == id);
     }
 }
