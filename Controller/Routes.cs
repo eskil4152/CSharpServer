@@ -28,6 +28,12 @@ public class Routes : Controller {
         return Json(res);
     }
 
+    [HttpGet("search/full/{var}")]
+    public IActionResult GetPeopleByFullName(string firstName, string lastName){
+        var res = personFunctions.GetPersonByFullName(firstName, lastName);
+        return Json(res);
+    }
+
     [HttpGet("{id}")]
     public IActionResult GetOnePerson(int id){
         var res = personFunctions.GetOnePerson(id);

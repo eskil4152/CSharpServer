@@ -27,6 +27,12 @@ public class PersonFunctions {
             .ToList();
     }
 
+    public List<Person> GetPersonByFullName(string firstName, string lastName) {
+        return dbContext.people
+            .Where(person => person.firstName == firstName && person.lastName == lastName)
+            .ToList();
+    }
+
     public Person? AddPerson(string firstname, string lastname, int age)
     {
         return null;
