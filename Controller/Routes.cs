@@ -16,6 +16,18 @@ public class Routes : Controller {
         return Json(res);
     }
 
+    [HttpGet("search/first/{var}")]
+    public IActionResult GetPeopleByFirstName(string var){
+        var res = personFunctions.GetPersonByFirstName(var);
+        return Json(res);
+    }
+
+    [HttpGet("search/last/{var}")]
+    public IActionResult GetPeopleByLastName(string var){
+        var res = personFunctions.GetPersonByLastName(var);
+        return Json(res);
+    }
+
     [HttpGet("{id}")]
     public IActionResult GetOnePerson(int id){
         var res = personFunctions.GetOnePerson(id);

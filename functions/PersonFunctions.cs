@@ -15,6 +15,14 @@ public class PersonFunctions {
         return dbContext.people.FirstOrDefault(person => person.id == id);
     }
 
+    public Person? GetPersonByFirstName(string var) {
+        return dbContext.people.FirstOrDefault(person => person.firstName == var);
+    }
+
+    public Person? GetPersonByLastName(string var) {
+        return dbContext.people.FirstOrDefault(person => person.lastName == var);
+    }
+
     public Person? AddPerson(string firstname, string lastname, int age)
     {
         return null;
