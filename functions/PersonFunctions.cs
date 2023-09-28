@@ -15,12 +15,16 @@ public class PersonFunctions {
         return dbContext.people.FirstOrDefault(person => person.id == id);
     }
 
-    public Person? GetPersonByFirstName(string var) {
-        return dbContext.people.FirstOrDefault(person => person.firstName == var);
+    public List<Person> GetPersonByFirstName(string var) {
+        return dbContext.people
+            .Where(person => person.firstName == var)
+            .ToList();
     }
 
-    public Person? GetPersonByLastName(string var) {
-        return dbContext.people.FirstOrDefault(person => person.lastName == var);
+    public List<Person> GetPersonByLastName(string var) {
+        return dbContext.people
+            .Where(person => person.lastName == var)
+            .ToList();
     }
 
     public Person? AddPerson(string firstname, string lastname, int age)
