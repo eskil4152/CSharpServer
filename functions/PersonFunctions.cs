@@ -14,4 +14,9 @@ public class PersonFunctions {
     public Person? GetOnePerson(int id){
         return dbContext.people.FirstOrDefault(person => person.id == id);
     }
+
+    public Person? AddPerson(string firstname, string lastname, int age)
+    {
+        return null;
+    }
 }
