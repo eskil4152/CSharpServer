@@ -28,7 +28,7 @@ public class Routes : Controller {
         return Json(res);
     }
 
-    [HttpGet("search/full/{var}")]
+    [HttpGet("search/full/{firstName}/{lastName}")]
     public IActionResult GetPeopleByFullName(string firstName, string lastName){
         var res = personFunctions.GetPersonByFullName(firstName, lastName);
         return Json(res);
