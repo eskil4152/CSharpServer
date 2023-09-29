@@ -1,5 +1,7 @@
+using System.Drawing.Drawing2D;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 [ApiController]
 [Route("api/people")]
@@ -13,34 +15,40 @@ public class Routes : Controller {
     [HttpGet("all")]
     public IActionResult GetAll(){
         var res = personFunctions.GetAllPeople();
-        return Json(res);
+
+        if (res.IsNullOrEmpty()) {
+            return NotFound();
+        }
+        return Ok(res);
     }
 
     [HttpGet("search/first/{var}")]
     public IActionResult GetPeopleByFirstName(string var){
         var res = personFunctions.GetPersonByFirstName(var);
-        return Json(res);
+        if (res.IsNullOrEmpty()) {
+            return NotFound();
+        }
+        return Ok(res);
     }
 
     [HttpGet("search/last/{var}")]
     public IActionResult GetPeopleByLastName(string var){
         var res = personFunctions.GetPersonByLastName(var);
-        return Json(res);
+
+        if (res.IsNullOrEmpty()) {
+            return NotFound();
+        }
+        return Ok(res);
     }
 
     [HttpGet("search/full/{firstName}/{lastName}")]
     public IActionResult GetPeopleByFullName(string firstName, string lastName){
         var res = personFunctions.GetPersonByFullName(firstName, lastName);
-        return Json(res);
-    }
 
-    [HttpGet("{id}")]
-    public IActionResult GetOnePerson(int id){
-        var res = personFunctions.GetOnePerson(id);
-        if (res != null) {
-            return Json(res);
-        } else {
+        if (res.IsNullOrEmpty()) {
             return NotFound();
         }
+
+        return Ok(res);
     }
 }

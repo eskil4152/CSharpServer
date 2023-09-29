@@ -32,7 +32,7 @@ public class Startup
             app.UseDeveloperExceptionPage();
             
         } else {
-            // Configure error handling, logging, and other production-specific settings here...
+           // error thing
         }
         
         app.UseRouting();
