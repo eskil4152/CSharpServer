@@ -5,10 +5,10 @@ using Microsoft.IdentityModel.Tokens;
 
 [ApiController]
 [Route("api/people")]
-public class Routes : Controller {
+public class PeopleRoutes : Controller {
     private readonly PersonFunctions personFunctions;
 
-    public Routes(PersonFunctions functions) {
+    public PeopleRoutes(PersonFunctions functions) {
         personFunctions = functions;
     }
 
@@ -19,6 +19,7 @@ public class Routes : Controller {
         if (res.IsNullOrEmpty()) {
             return NotFound();
         }
+        
         return Ok(res);
     }
 
@@ -54,6 +55,8 @@ public class Routes : Controller {
 
     [HttpPost("new")]
     public IActionResult AddPerson([FromBody] Person person){
+        var res = personFunctions.AddPerson(person);
+
         return Ok();
     }
 

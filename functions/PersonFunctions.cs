@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using SQLitePCL;
 
@@ -32,8 +33,13 @@ public class PersonFunctions {
             .ToList();
     }
 
-    public Person? AddPerson(string firstname, string lastname, int age)
-    {
-        return null;
+    public Person? AddPerson(Person person) {
+        person.id = Guid.NewGuid();
+        dbContext.people
+            .Add(person);
+
+        dbContext.SaveChanges();
+
+        return person;
     }
 }
