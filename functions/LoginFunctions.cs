@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using SQLitePCL;
 
 public class LoginFunctions {
     private readonly ApplicationDbContext dbContext;
@@ -9,8 +10,17 @@ public class LoginFunctions {
 
     private readonly PasswordHasher passwordHasher = new();
 
-    public int LogInUser(User user) {
-        return 0;
+    public bool LogInUser(User user) {
+        var username = user.username;
+        var password = user.password;
+
+        var existingUser = dbContext.users.FirstOrDefault((e) => e.username == username);
+
+        if (existingUser == null) {
+            return false;
+        }
+
+        return passwordHasher.VerifyPassword(password, existingUser.password);
     }
 
     public int RegisterUser(User user){

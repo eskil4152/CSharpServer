@@ -12,9 +12,9 @@ public class LoginController : Controller {
     public IActionResult Login([FromBody] User user){
         var statusCode = loginFunctions.LogInUser(user);
 
-        if (statusCode == 401) {
+        if (statusCode == false) {
             return Unauthorized();
-        } else if (statusCode == 200) {
+        } else if (statusCode == true) {
             return Ok();
         } else {
             return StatusCode(500);
