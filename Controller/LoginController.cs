@@ -1,13 +1,37 @@
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("login")]
 public class LoginController : Controller {
 
-    [HttpGet]
-    public IActionResult Login(){
+    private readonly LoginFunctions loginFunctions;
+    public LoginController (LoginFunctions loginFunctions) {
+        this.loginFunctions = loginFunctions;
+    }
 
-        return NotFound();
+    [HttpPost("login")]
+    public IActionResult Login([FromBody] User user){
+        var statusCode = loginFunctions.LogInUser(user);
+
+        if (statusCode == 401) {
+            return Unauthorized();
+        } else if (statusCode == 200) {
+            return Ok();
+        } else {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpPost("register")]
+    public IActionResult Register([FromBody] User user){
+        var statusCode = loginFunctions.RegisterUser(user);
+
+        if (statusCode == 409) {
+            return Conflict();
+        } else if (statusCode == 200) {
+            return Ok();
+        } else {
+            return StatusCode(500);
+        }
     }
 
 }

@@ -11,8 +11,11 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services){
         var connectionString = config.GetConnectionString("DefaultConnection");
-        services.AddScoped<Person>();
+
+        //services.AddScoped<Person>();
         services.AddScoped<PersonFunctions>();
+        services.AddScoped<LoginFunctions>();
+
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString));
         services.AddControllers();

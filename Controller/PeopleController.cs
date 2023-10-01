@@ -5,11 +5,11 @@ using Microsoft.IdentityModel.Tokens;
 
 [ApiController]
 [Route("api/people")]
-public class PeopleRoutes : Controller {
+public class PeopleController : Controller {
     private readonly PersonFunctions personFunctions;
 
-    public PeopleRoutes(PersonFunctions functions) {
-        personFunctions = functions;
+    public PeopleController(PersonFunctions personFunctions) {
+        this.personFunctions = personFunctions;
     }
 
     [HttpGet("all")]
