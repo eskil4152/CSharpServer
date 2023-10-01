@@ -51,4 +51,10 @@ public class Routes : Controller {
 
         return Ok(res);
     }
+
+    [HttpPost("new")]
+    public IActionResult AddPerson([FromBody] Person person){
+        return Ok();
+    }
+
 }
