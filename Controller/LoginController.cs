@@ -16,6 +16,11 @@ public class LoginController : Controller {
             return Unauthorized();
         }
 
+        var authorizationHeader = HttpContext.Request.Headers["Authorization"].ToString();
+        var token = authorizationHeader.Replace("Bearer: ", "");
+
+        System.Console.WriteLine("recieved: " + token);
+
         return Ok(result.Token);
     }
 

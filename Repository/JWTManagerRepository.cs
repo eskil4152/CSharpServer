@@ -22,6 +22,7 @@ public class JwtManagerRepository : IJWTManagerRepository {
 		   Expires = DateTime.UtcNow.AddMinutes(10),
 		   SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey),SecurityAlgorithms.Aes128CbcHmacSha256)
 		};
+        
 		var token = tokenHandler.CreateToken(tokenDescriptor);
 		return new Tokens { Token = tokenHandler.WriteToken(token) };
     }
