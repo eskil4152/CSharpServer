@@ -1,3 +1,5 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -15,11 +17,6 @@ public class LoginController : Controller {
         if (result == null) {
             return Unauthorized();
         }
-
-        var authorizationHeader = HttpContext.Request.Headers["Authorization"].ToString();
-        var token = authorizationHeader.Replace("Bearer: ", "");
-
-        System.Console.WriteLine("recieved: " + token);
 
         return Ok(result.Token);
     }

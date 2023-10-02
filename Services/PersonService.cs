@@ -5,8 +5,11 @@ using SQLitePCL;
 public class PersonFunctions {
 
     private readonly ApplicationDbContext dbContext;
-    public PersonFunctions(ApplicationDbContext context) {
+    private readonly JwtManagerRepository jwtManagerRepository;
+
+    public PersonFunctions(ApplicationDbContext context, JwtManagerRepository jwtManagerRepository) {
         dbContext = context;
+        this.jwtManagerRepository = jwtManagerRepository;
     }
 
     public List<Person> GetAllPeople() {
@@ -33,13 +36,19 @@ public class PersonFunctions {
             .ToList();
     }
 
-    public Person? AddPerson(Person person) {
-        person.id = Guid.NewGuid();
-        dbContext.people
-            .Add(person);
+    public int AddPerson(Person person, string token) {
+        bool isAuthorized = jwtManagerRepository.CheckTokenAuthorization(token, 4);
 
-        dbContext.SaveChanges();
+        if (isAuthorized) {
+            person.id = Guid.NewGuid();
+            dbContext.people
+                .Add(person);
 
-        return person;
+            dbContext.SaveChanges();
+
+            return 200;
+        }
+
+        return 401;
     }
 }

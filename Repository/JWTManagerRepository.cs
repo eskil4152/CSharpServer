@@ -22,9 +22,40 @@ public class JwtManagerRepository : IJWTManagerRepository {
 		   Expires = DateTime.UtcNow.AddMinutes(10),
 		   SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey),SecurityAlgorithms.Aes128CbcHmacSha256)
 		};
-        
+
 		var token = tokenHandler.CreateToken(tokenDescriptor);
 		return new Tokens { Token = tokenHandler.WriteToken(token) };
     }
 
+    public bool CheckTokenAuthorization(string token, int requiredLevel) {
+        var handler = new JwtSecurityTokenHandler();
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var tokenAuthorityLevel = 0;
+
+        try {
+            if (handler.ReadToken(token) is JwtSecurityToken jsonToken){
+                var authoritylevelClaim = jsonToken.Claims.FirstOrDefault((e) => e.Type == "role");
+
+                if (authoritylevelClaim != null && int.TryParse(authoritylevelClaim.Value, out int authoritylevel)) {
+                    tokenAuthorityLevel = authoritylevel;
+                    System.Console.WriteLine("Users authority level: " + authoritylevel);
+                } else {
+                    System.Console.WriteLine("Authority level not found or invalid");
+                    return false;
+                }
+            } else {
+                System.Console.WriteLine("Invalid token format");
+                return false;
+            }
+
+            if (tokenAuthorityLevel >= requiredLevel) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch {
+            System.Console.WriteLine("Token error");
+            return false;
+        }
+    }
 }

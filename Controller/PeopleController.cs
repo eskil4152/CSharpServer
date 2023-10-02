@@ -55,9 +55,18 @@ public class PeopleController : Controller {
 
     [HttpPost("new")]
     public IActionResult AddPerson([FromBody] Person person){
-        var res = personFunctions.AddPerson(person);
+        var authorizationHeader = HttpContext.Request.Headers["Authorization"].ToString();
+        var token = authorizationHeader.Replace("Bearer: ", "");
 
-        return Ok();
+        var res = personFunctions.AddPerson(person, token);
+
+        if (res == 401) {
+            return Unauthorized();
+        } else if (res == 200) {
+            return Ok();
+        } else {
+            return StatusCode(500);
+        }
     }
 
 }
