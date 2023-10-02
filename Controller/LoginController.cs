@@ -10,15 +10,13 @@ public class LoginController : Controller {
 
     [HttpPost("login")]
     public IActionResult Login([FromBody] User user){
-        var statusCode = loginFunctions.LogInUser(user);
+        var result = loginFunctions.LogInUser(user);
 
-        if (statusCode == false) {
+        if (result == null) {
             return Unauthorized();
-        } else if (statusCode == true) {
-            return Ok();
-        } else {
-            return StatusCode(500);
         }
+
+        return Ok(result.Token);
     }
 
     [HttpPost("register")]

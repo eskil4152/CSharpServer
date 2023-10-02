@@ -1,26 +1,46 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using SQLitePCL;
 
 public class LoginFunctions {
     private readonly ApplicationDbContext dbContext;
-    public LoginFunctions(ApplicationDbContext context) {
+    private readonly IConfiguration configuration;
+    private readonly JwtManagerRepository jwtManagerRepository;
+
+    public LoginFunctions(
+        ApplicationDbContext context, 
+        IConfiguration configuration,
+        JwtManagerRepository jwtManagerRepository) {
         dbContext = context;
+        this.configuration = configuration;
+        this.jwtManagerRepository = jwtManagerRepository;
     }
 
     private readonly PasswordHasher passwordHasher = new();
-
-    public bool LogInUser(User user) {
+    
+    public Tokens? LogInUser(User user) {
         var username = user.username;
         var password = user.password;
 
         var existingUser = dbContext.users.FirstOrDefault((e) => e.username == username);
 
         if (existingUser == null) {
-            return false;
+            return null;
         }
 
-        return passwordHasher.VerifyPassword(password, existingUser.password);
+        bool passwordCheck = passwordHasher.VerifyPassword(password, existingUser.password);
+
+        if (!passwordCheck) {
+            return null;
+        }
+
+        var token = jwtManagerRepository.Authenticate(existingUser);
+
+        return token;
     }
 
     public int RegisterUser(User user){
