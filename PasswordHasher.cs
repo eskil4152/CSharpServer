@@ -5,7 +5,7 @@ public class PasswordHasher {
         string salt = BCrypt.Net.BCrypt.GenerateSalt();
         string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
 
-        return hashedPassword;
+        return hashedPassword; 
     }
 
     public bool VerifyPassword(string enteredPassword, string hashedPassword) {
