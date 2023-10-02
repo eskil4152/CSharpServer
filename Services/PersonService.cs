@@ -18,21 +18,21 @@ public class PersonFunctions {
 
     public List<Person> GetPersonByFirstName(string var) {
         return dbContext.people
-            .Where(person => person.firstName == var)
+            .Where(person => person.FirstName == var)
             .ToList();
     }
 
     public List<Person> GetPersonByLastName(string var) {
 
         return dbContext.people
-            .Where(person => person.lastName == var)
+            .Where(person => person.LastName == var)
             .ToList();
     }
 
     public List<Person> GetPersonByFullName(string firstName, string lastName) {
 
         return dbContext.people
-            .Where(person => person.firstName == firstName && person.lastName == lastName)
+            .Where(person => person.FirstName == firstName && person.LastName == lastName)
             .ToList();
     }
 

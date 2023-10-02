@@ -5,11 +5,11 @@ public class Person {
     public Guid id {get; set;}
 
     [Column("firstname")]
-    public string firstName {get; set;}
+    public required string FirstName {get; set;}
 
     [Column("lastname")]
-    public string lastName {get; set;}
+    public required string LastName {get; set;}
 
     [Column("age")]
-    public int age {get; set;}
+    public required int Age {get; set;}
 }

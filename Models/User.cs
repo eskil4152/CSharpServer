@@ -5,11 +5,11 @@ public class User {
     public Guid id {get; set;}
 
     [Column("username")]
-    public string username {get; set;}
+    public required string Username {get; set;}
 
     [Column("password")]
-    public string password {get; set;}
+    public required string Password {get; set;}
 
     [Column("authoritylevel")]
-    public int authoritylevel {get; set;}
+    public int Authoritylevel {get; set;}
 }

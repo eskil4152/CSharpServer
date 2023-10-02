@@ -16,8 +16,8 @@ public class JwtManagerRepository : IJWTManagerRepository {
 		var tokenDescriptor = new SecurityTokenDescriptor {
 		  Subject = new ClaimsIdentity(new Claim[]
 		  {
-			 new(ClaimTypes.Name, user.username),
-             new(ClaimTypes.Role, user.authoritylevel.ToString())  
+			 new(ClaimTypes.Name, user.Username),
+             new(ClaimTypes.Role, user.Authoritylevel.ToString())  
 		  }),
 		   Expires = DateTime.UtcNow.AddMinutes(10),
 		   SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey),SecurityAlgorithms.Aes128CbcHmacSha256)

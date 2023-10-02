@@ -23,16 +23,16 @@ public class LoginFunctions {
     private readonly PasswordHasher passwordHasher = new();
     
     public Tokens? LogInUser(User user) {
-        var username = user.username;
-        var password = user.password;
+        var username = user.Username;
+        var password = user.Password;
 
-        var existingUser = dbContext.users.FirstOrDefault((e) => e.username == username);
+        var existingUser = dbContext.users.FirstOrDefault((e) => e.Username == username);
 
         if (existingUser == null) {
             return null;
         }
 
-        bool passwordCheck = passwordHasher.VerifyPassword(password, existingUser.password);
+        bool passwordCheck = passwordHasher.VerifyPassword(password, existingUser.Password);
 
         if (!passwordCheck) {
             return null;
@@ -44,10 +44,10 @@ public class LoginFunctions {
     }
 
     public int RegisterUser(User user){
-        var username = user.username;
-        var password = passwordHasher.HashPass(user.password);
+        var username = user.Username;
+        var password = passwordHasher.HashPass(user.Password);
 
-        var userCheck = dbContext.users.FirstOrDefault((e) => e.username == username);
+        var userCheck = dbContext.users.FirstOrDefault((e) => e.Username == username);
 
         if (userCheck != null) {
             return 409;
@@ -55,9 +55,9 @@ public class LoginFunctions {
 
         var newUser = new User {
             id = Guid.NewGuid(),
-            username = username,
-            password = password,
-            authoritylevel = 1
+            Username = username,
+            Password = password,
+            Authoritylevel = 1
         };
 
         dbContext.users.Add(newUser);
