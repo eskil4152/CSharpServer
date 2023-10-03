@@ -3,4 +3,6 @@
 bin/
 obj/
 .DS_Store
+appSettings.json
+evolve.json
 AuthLevels.txt

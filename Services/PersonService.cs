@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using SQLitePCL;
 
 public class PersonFunctions {
 
@@ -40,7 +39,7 @@ public class PersonFunctions {
         bool isAuthorized = jwtManagerRepository.CheckTokenAuthorization(token, 4);
 
         if (isAuthorized) {
-            person.id = Guid.NewGuid();
+            person.Id = Guid.NewGuid();
             dbContext.people
                 .Add(person);
 

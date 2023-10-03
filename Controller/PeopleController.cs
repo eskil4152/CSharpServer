@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 [ApiController]
 [Route("api/people")]
@@ -15,7 +14,7 @@ public class PeopleController : Controller {
     public IActionResult GetAll(){
         var res = personFunctions.GetAllPeople();
 
-        if (res.IsNullOrEmpty()) {
+        if (res.Count == 0) {
             return NotFound();
         }
         
@@ -25,7 +24,8 @@ public class PeopleController : Controller {
     [HttpGet("search/first/{var}")]
     public IActionResult GetPeopleByFirstName(string var){
         var res = personFunctions.GetPersonByFirstName(var);
-        if (res.IsNullOrEmpty()) {
+
+        if (res.Count == 0) {
             return NotFound();
         }
         return Ok(res);
@@ -35,7 +35,7 @@ public class PeopleController : Controller {
     public IActionResult GetPeopleByLastName(string var){
         var res = personFunctions.GetPersonByLastName(var);
 
-        if (res.IsNullOrEmpty()) {
+        if (res.Count == 0) {
             return NotFound();
         }
         return Ok(res);
@@ -45,7 +45,7 @@ public class PeopleController : Controller {
     public IActionResult GetPeopleByFullName(string firstName, string lastName){
         var res = personFunctions.GetPersonByFullName(firstName, lastName);
 
-        if (res.IsNullOrEmpty()) {
+        if (res.Count == 0) {
             return NotFound();
         }
 

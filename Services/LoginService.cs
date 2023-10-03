@@ -1,11 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using SQLitePCL;
-
 public class LoginFunctions {
     private readonly ApplicationDbContext dbContext;
     private readonly IConfiguration configuration;
@@ -54,7 +46,7 @@ public class LoginFunctions {
         }
 
         var newUser = new User {
-            id = Guid.NewGuid(),
+            Id = Guid.NewGuid(),
             Username = username,
             Password = password,
             Authoritylevel = 1
