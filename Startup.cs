@@ -56,10 +56,10 @@ public class Startup {
             app.UseDeveloperExceptionPage();
         }
 
+        app.UseRouting();
+
         app.UseAuthentication();
         app.UseAuthorization();
-
-        app.UseRouting();
 
         app.UseCors("AllowAnyOrigin");
 
