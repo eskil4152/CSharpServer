@@ -20,7 +20,7 @@ public class JwtManagerRepository : IJWTManagerRepository {
              new(ClaimTypes.Role, user.Authoritylevel.ToString())  
 		  }),
 		   Expires = DateTime.UtcNow.AddMinutes(10),
-		   SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey),SecurityAlgorithms.Aes128CbcHmacSha256)
+		   SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey),SecurityAlgorithms.HmacSha256)
 		};
 
 		var token = tokenHandler.CreateToken(tokenDescriptor);

@@ -11,7 +11,7 @@ public class Startup {
     }
 
     public void ConfigureServices(IServiceCollection services){
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var connectionString = configuration["ConnectionString:DefaultConnection"];
 
         services.AddScoped<PersonFunctions>();
         services.AddScoped<LoginFunctions>();

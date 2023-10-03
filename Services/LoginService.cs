@@ -1,14 +1,11 @@
 public class LoginFunctions {
     private readonly ApplicationDbContext dbContext;
-    private readonly IConfiguration configuration;
     private readonly JwtManagerRepository jwtManagerRepository;
 
     public LoginFunctions(
         ApplicationDbContext context, 
-        IConfiguration configuration,
         JwtManagerRepository jwtManagerRepository) {
         dbContext = context;
-        this.configuration = configuration;
         this.jwtManagerRepository = jwtManagerRepository;
     }
 
