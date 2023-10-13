@@ -21,9 +21,9 @@ public class PeopleController : Controller {
         return Ok(res);
     }
 
-    [HttpGet("search/first/{var}")]
-    public IActionResult GetPeopleByFirstName(string var){
-        var res = personFunctions.GetPersonByFirstName(var);
+    [HttpGet("search/first")]
+    public IActionResult GetPeopleByFirstName([FromBody] HttpContent content){
+        var res = personFunctions.GetPersonByFirstName(content.firstName);
 
         if (res.Count == 0) {
             return NotFound();
@@ -31,9 +31,10 @@ public class PeopleController : Controller {
         return Ok(res);
     }
 
-    [HttpGet("search/last/{var}")]
-    public IActionResult GetPeopleByLastName(string var){
-        var res = personFunctions.GetPersonByLastName(var);
+    [HttpGet("search/last")]
+    public IActionResult GetPeopleByLastName([FromBody] HttpContent content)
+    {
+        var res = personFunctions.GetPersonByLastName(content.lastName);
 
         if (res.Count == 0) {
             return NotFound();
@@ -41,9 +42,10 @@ public class PeopleController : Controller {
         return Ok(res);
     }
 
-    [HttpGet("search/full/{firstName}/{lastName}")]
-    public IActionResult GetPeopleByFullName(string firstName, string lastName){
-        var res = personFunctions.GetPersonByFullName(firstName, lastName);
+    [HttpGet("search/full")]
+    public IActionResult GetPeopleByFullName([FromBody] HttpContent content)
+    {
+        var res = personFunctions.GetPersonByFullName(content.firstName, content.lastName);
 
         if (res.Count == 0) {
             return NotFound();
@@ -67,5 +69,6 @@ public class PeopleController : Controller {
             return StatusCode(500);
         }
     }
-
 }
+
+public record HttpContent(string firstName, string lastName, int age);

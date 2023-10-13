@@ -2,6 +2,7 @@
 .vs/
 bin/
 obj/
+out/
 .DS_Store
 appSettings.json
 evolve.json
