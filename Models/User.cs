@@ -1,15 +1,25 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using CSharpServer.Models;
 
-public class User {
+public class User
+{
+    [Key]
     [Column("id")]
-    public Guid Id {get; set;} = Guid.NewGuid();
+    public long Id { get; set; }
 
+    [Required]
     [Column("username")]
-    public required string Username {get; set;} = "";
+    public string Username { get; set; }
 
+    [Required]
     [Column("password")]
-    public required string Password {get; set;} = "";
+    public string Password { get; set; }
 
-    [Column("authoritylevel")]
-    public int Authoritylevel {get; set;} = 0;
+    [Required]
+    [ForeignKey("RoleId")]
+    public virtual Role Role { get; set; }
+
+    [Column("role_id")]
+    public long RoleId { get; set; }
 }

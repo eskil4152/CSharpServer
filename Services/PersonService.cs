@@ -36,10 +36,9 @@ public class PersonFunctions {
     }
 
     public int AddPerson(Person person, string token) {
-        bool isAuthorized = jwtManagerRepository.CheckTokenAuthorization(token, 4);
+        bool isAuthorized = jwtManagerRepository.CheckTokenAuthorization(token, "Moderator");
 
         if (isAuthorized) {
-            person.Id = Guid.NewGuid();
             dbContext.people
                 .Add(person);
 

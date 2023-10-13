@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 public class Startup {
@@ -18,7 +19,14 @@ public class Startup {
         services.AddScoped<JwtManagerRepository>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(connectionString));
+        {
+            options.UseNpgsql(connectionString);
+
+            // Enable logging for Entity Framework Core
+            options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+        });
+
+
         services.AddControllers();
 
         services.AddCors(options => {

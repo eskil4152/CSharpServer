@@ -17,7 +17,7 @@ public class JwtManagerRepository : IJWTManagerRepository {
 		  Subject = new ClaimsIdentity(new Claim[]
 		  {
 			 new(ClaimTypes.Name, user.Username),
-             new(ClaimTypes.Role, user.Authoritylevel.ToString())  
+             new(ClaimTypes.Role, user.Role.Name)  
 		  }),
 		   Expires = DateTime.UtcNow.AddMinutes(10),
 		   SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey),SecurityAlgorithms.HmacSha256)
@@ -27,33 +27,34 @@ public class JwtManagerRepository : IJWTManagerRepository {
 		return new Tokens { Token = tokenHandler.WriteToken(token) };
     }
 
-    public bool CheckTokenAuthorization(string token, int requiredLevel) {
+    public bool CheckTokenAuthorization(string token, string requiredRole) {
         var handler = new JwtSecurityTokenHandler();
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var tokenAuthorityLevel = 0;
 
-        try {
-            if (handler.ReadToken(token) is JwtSecurityToken jsonToken){
-                var authoritylevelClaim = jsonToken.Claims.FirstOrDefault((e) => e.Type == "role");
+        try
+        {
+            if (handler.ReadToken(token) is JwtSecurityToken jsonToken)
+            {
+                var claims = jsonToken.Claims;
 
-                if (authoritylevelClaim != null && int.TryParse(authoritylevelClaim.Value, out int authoritylevel)) {
-                    tokenAuthorityLevel = authoritylevel;
-                    System.Console.WriteLine("Users authority level: " + authoritylevel);
-                } else {
-                    System.Console.WriteLine("Authority level not found or invalid");
+                // Check if the required role claim exists in the token
+                if (claims.Any(c => c.Type == ClaimTypes.Role && c.Value == requiredRole))
+                {
+                    return true;
+                }
+                else
+                {
+                    System.Console.WriteLine("User does not have the required role.");
                     return false;
                 }
-            } else {
+            }
+            else
+            {
                 System.Console.WriteLine("Invalid token format");
                 return false;
             }
-
-            if (tokenAuthorityLevel >= requiredLevel) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch {
+        }
+        catch
+        {
             System.Console.WriteLine("Token error");
             return false;
         }

@@ -1,15 +1,19 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 public class Person {
+
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id")]
-    public Guid Id {get; set;} = Guid.NewGuid();
+    public long Id {get; set;}
 
     [Column("firstname")]
-    public required string FirstName {get; set;} = "";
+    public string FirstName {get; set;}
 
     [Column("lastname")]
-    public required string LastName {get; set;} = "";
+    public string LastName {get; set;}
 
     [Column("age")]
-    public required int Age {get; set;} = 0;
+    public int Age {get; set;}
 }
