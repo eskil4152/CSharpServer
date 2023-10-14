@@ -54,6 +54,19 @@ public class PeopleController : Controller {
         return Ok(res);
     }
 
+    [HttpGet("search/id")]
+    public IActionResult GetPeopleById([FromBody] HttpContent content)
+    {
+        var res = personFunctions.GetPersonById(content.id);
+
+        if (res.count == 0)
+        {
+            return NotFound();
+        }
+
+        return Ok(res);
+    }
+
     [HttpPost("new")]
     public IActionResult AddPerson([FromBody] Person person){
         var authorizationHeader = HttpContext.Request.Headers["Authorization"].ToString();
@@ -71,4 +84,4 @@ public class PeopleController : Controller {
     }
 }
 
-public record HttpContent(string firstName, string lastName, int age);
+public record HttpContent(int id, string firstName, string lastName, int age);

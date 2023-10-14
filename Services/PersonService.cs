@@ -35,8 +35,15 @@ public class PersonFunctions {
             .ToList();
     }
 
+    public List<Person> GetPersonById(int id)
+    {
+        return dbContext.people
+            .Where(person => person.Id == id)
+            .ToList();
+    }
+
     public int AddPerson(Person person, string token) {
-        bool isAuthorized = jwtManagerRepository.CheckTokenAuthorization(token, "Moderator");
+        bool isAuthorized = jwtManagerRepository.Authorize(token, 3);
 
         if (isAuthorized) {
             dbContext.people
