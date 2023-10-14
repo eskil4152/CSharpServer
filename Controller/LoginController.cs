@@ -9,27 +9,32 @@ public class LoginController : Controller {
     }
 
     [HttpPost("login")]
-    public IActionResult Login([FromBody] User user){
-        var result = loginFunctions.LogInUser(user);
+    public IActionResult Login([FromBody] LoginContent content){
+        var result = loginFunctions.LogInUser(content.username, content.password);
 
         if (result == null) {
             return Unauthorized();
-        }
-
-        return Ok(result.Token);
-    }
-
-    [HttpPost("register")]
-    public IActionResult Register([FromBody] User user){
-        var statusCode = loginFunctions.RegisterUser(user);
-
-        if (statusCode == 409) {
-            return Conflict();
-        } else if (statusCode == 200) {
-            return Ok();
-        } else {
+        } else if (result is Tokens)
+        {
+            return Ok(result.Token);
+        } else
+        {
             return StatusCode(500);
         }
     }
 
+    [HttpPost("register")]
+    public IActionResult Register([FromBody] LoginContent content){
+        var result = loginFunctions.RegisterUser(content.username, content.password);
+
+        if (result == null) {
+            return Conflict();
+        } else if (result is Tokens) {
+            return Ok(result.Token);
+        } else {
+            return StatusCode(500);
+        }
+    }
 }
+
+public record LoginContent (string username, string password);

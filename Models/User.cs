@@ -1,15 +1,20 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public class User {
+public class User
+{
+    [Key]
     [Column("id")]
-    public Guid Id {get; set;} = Guid.NewGuid();
+    public long Id { get; set; }
 
+    [Required]
     [Column("username")]
-    public required string Username {get; set;} = "";
+    public string Username { get; set; }
 
+    [Required]
     [Column("password")]
-    public required string Password {get; set;} = "";
+    public string Password { get; set; }
 
-    [Column("authoritylevel")]
-    public int Authoritylevel {get; set;} = 0;
+    [Column("authorizationlevel")]
+    public int AuthorizationLevel { get; set; } = 1;
 }

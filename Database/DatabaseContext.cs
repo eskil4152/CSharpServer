@@ -1,4 +1,6 @@
+using System.Reflection.Emit;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 public class ApplicationDbContext : DbContext
 {
@@ -7,7 +9,6 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    // Define your DbSet properties for database tables here
     public DbSet<Person> people { get; set; }
     public DbSet<User> users { get; set; }
 }

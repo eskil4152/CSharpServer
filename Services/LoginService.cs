@@ -1,23 +1,19 @@
+using Microsoft.EntityFrameworkCore;
+
 public class LoginFunctions {
     private readonly ApplicationDbContext dbContext;
-    private readonly IConfiguration configuration;
     private readonly JwtManagerRepository jwtManagerRepository;
 
     public LoginFunctions(
         ApplicationDbContext context, 
-        IConfiguration configuration,
         JwtManagerRepository jwtManagerRepository) {
         dbContext = context;
-        this.configuration = configuration;
         this.jwtManagerRepository = jwtManagerRepository;
     }
 
     private readonly PasswordHasher passwordHasher = new();
     
-    public Tokens? LogInUser(User user) {
-        var username = user.Username;
-        var password = user.Password;
-
+    public Tokens? LogInUser(string username, string password) {
         var existingUser = dbContext.users.FirstOrDefault((e) => e.Username == username);
 
         if (existingUser == null) {
@@ -30,31 +26,26 @@ public class LoginFunctions {
             return null;
         }
 
-        var token = jwtManagerRepository.Authenticate(existingUser);
-
-        return token;
+        return jwtManagerRepository.Authenticate(existingUser);
     }
 
-    public int RegisterUser(User user){
-        var username = user.Username;
-        var password = passwordHasher.HashPass(user.Password);
+    public Tokens? RegisterUser(string username, string password){
 
         var userCheck = dbContext.users.FirstOrDefault((e) => e.Username == username);
 
         if (userCheck != null) {
-            return 409;
+            return null;
         }
 
         var newUser = new User {
-            Id = Guid.NewGuid(),
             Username = username,
-            Password = password,
-            Authoritylevel = 1
+            Password = passwordHasher.HashPass(password),
         };
+
 
         dbContext.users.Add(newUser);
         dbContext.SaveChanges();
 
-        return 200;
+        return jwtManagerRepository.Authenticate(newUser);
     }
 }

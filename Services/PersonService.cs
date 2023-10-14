@@ -35,14 +35,38 @@ public class PersonFunctions {
             .ToList();
     }
 
+    public List<Person> GetPersonById(long id)
+    {
+        return dbContext.people
+            .Where(person => person.Id == id)
+            .ToList();
+    }
+
     public int AddPerson(Person person, string token) {
-        bool isAuthorized = jwtManagerRepository.CheckTokenAuthorization(token, 4);
+        bool isAuthorized = jwtManagerRepository.Authorize(token, 3);
 
         if (isAuthorized) {
-            person.Id = Guid.NewGuid();
             dbContext.people
                 .Add(person);
 
+            dbContext.SaveChanges();
+
+            return 200;
+        }
+
+        return 401;
+    }
+
+    public int DeletePerson(long id, string token)
+    {
+        bool isAuthorized = jwtManagerRepository.Authorize(token, 3);
+
+        if (isAuthorized)
+        {
+            var person = dbContext.people
+            .FirstOrDefault(person => person.Id == id);
+
+            dbContext.people.Remove(person!);
             dbContext.SaveChanges();
 
             return 200;

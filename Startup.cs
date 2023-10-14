@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 public class Startup {
@@ -11,14 +12,21 @@ public class Startup {
     }
 
     public void ConfigureServices(IServiceCollection services){
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var connectionString = configuration["ConnectionString:DefaultConnection"];
 
         services.AddScoped<PersonFunctions>();
         services.AddScoped<LoginFunctions>();
         services.AddScoped<JwtManagerRepository>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(connectionString));
+        {
+            options.UseNpgsql(connectionString);
+
+            // Enable logging for Entity Framework Core
+            options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+        });
+
+
         services.AddControllers();
 
         services.AddCors(options => {
@@ -38,8 +46,8 @@ public class Startup {
             var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!);
             o.SaveToken = true;
             o.TokenValidationParameters = new TokenValidationParameters {
-                ValidateIssuer = false,
-			    ValidateAudience = false,
+                ValidateIssuer = true,
+			    ValidateAudience = true,
 			    ValidateLifetime = true,
 			    ValidateIssuerSigningKey = true,
 			    ValidIssuer = configuration["Jwt:Issuer"],
@@ -56,10 +64,10 @@ public class Startup {
             app.UseDeveloperExceptionPage();
         }
 
+        app.UseRouting();
+
         app.UseAuthentication();
         app.UseAuthorization();
-
-        app.UseRouting();
 
         app.UseCors("AllowAnyOrigin");
 

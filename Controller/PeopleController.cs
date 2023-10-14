@@ -6,6 +6,11 @@ using Microsoft.EntityFrameworkCore;
 public class PeopleController : Controller {
     private readonly PersonFunctions personFunctions;
 
+    public record HttpId(string id);
+    public record HttpFirstName(string firstName);
+    public record HttpLastName(string lastName);
+    public record HttpFullname(string firstName, string lastName);
+
     public PeopleController(PersonFunctions personFunctions) {
         this.personFunctions = personFunctions;
     }
@@ -21,9 +26,9 @@ public class PeopleController : Controller {
         return Ok(res);
     }
 
-    [HttpGet("search/first/{var}")]
-    public IActionResult GetPeopleByFirstName(string var){
-        var res = personFunctions.GetPersonByFirstName(var);
+    [HttpPost("search/first")]
+    public IActionResult GetPeopleByFirstName([FromBody] HttpFirstName content){
+        var res = personFunctions.GetPersonByFirstName(content.firstName);
 
         if (res.Count == 0) {
             return NotFound();
@@ -31,9 +36,10 @@ public class PeopleController : Controller {
         return Ok(res);
     }
 
-    [HttpGet("search/last/{var}")]
-    public IActionResult GetPeopleByLastName(string var){
-        var res = personFunctions.GetPersonByLastName(var);
+    [HttpPost("search/last")]
+    public IActionResult GetPeopleByLastName([FromBody] HttpLastName content)
+    {
+        var res = personFunctions.GetPersonByLastName(content.lastName);
 
         if (res.Count == 0) {
             return NotFound();
@@ -41,11 +47,27 @@ public class PeopleController : Controller {
         return Ok(res);
     }
 
-    [HttpGet("search/full/{firstName}/{lastName}")]
-    public IActionResult GetPeopleByFullName(string firstName, string lastName){
-        var res = personFunctions.GetPersonByFullName(firstName, lastName);
+    [HttpPost("search/full")]
+    public IActionResult GetPeopleByFullName([FromBody] HttpFullname content)
+    {
+        var res = personFunctions.GetPersonByFullName(content.firstName, content.lastName);
 
         if (res.Count == 0) {
+            return NotFound();
+        }
+
+        return Ok(res);
+    }
+
+    [HttpPost("search/id")]
+    public IActionResult GetPeopleById([FromBody] HttpId content)
+    {
+        _ = long.TryParse(content.id, out long id);
+
+        var res = personFunctions.GetPersonById(id);
+
+        if (res.Count == 0)
+        {
             return NotFound();
         }
 
@@ -68,4 +90,19 @@ public class PeopleController : Controller {
         }
     }
 
+    [HttpDelete("delete")]
+    public IActionResult DeletePerson([FromBody] HttpId content)
+    {
+        _ = long.TryParse(content.id, out long id);
+
+        var authorizationHeader = HttpContext.Request.Headers["Authorization"].ToString();
+        var token = authorizationHeader.Replace("Bearer: ", "");
+
+        var res = personFunctions.DeletePerson(id, token);
+
+        if (res == 200)
+            return NoContent();
+
+        return Unauthorized();
+    }
 }
