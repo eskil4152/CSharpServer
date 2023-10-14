@@ -35,7 +35,7 @@ public class PersonFunctions {
             .ToList();
     }
 
-    public List<Person> GetPersonById(int id)
+    public List<Person> GetPersonById(long id)
     {
         return dbContext.people
             .Where(person => person.Id == id)

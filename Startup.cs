@@ -46,8 +46,8 @@ public class Startup {
             var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!);
             o.SaveToken = true;
             o.TokenValidationParameters = new TokenValidationParameters {
-                ValidateIssuer = false,
-			    ValidateAudience = false,
+                ValidateIssuer = true,
+			    ValidateAudience = true,
 			    ValidateLifetime = true,
 			    ValidateIssuerSigningKey = true,
 			    ValidIssuer = configuration["Jwt:Issuer"],
