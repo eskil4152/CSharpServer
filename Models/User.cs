@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using CSharpServer.Models;
 
 public class User
 {
@@ -16,10 +15,6 @@ public class User
     [Column("password")]
     public string Password { get; set; }
 
-    [Required]
-    [ForeignKey("RoleId")]
-    public virtual Role Role { get; set; }
-
-    [Column("role_id")]
-    public long RoleId { get; set; }
+    [Column("authorizationlevel")]
+    public int AuthorizationLevel { get; set; } = 1;
 }

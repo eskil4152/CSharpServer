@@ -26,9 +26,7 @@ public class LoginFunctions {
             return null;
         }
 
-        var token = jwtManagerRepository.Authenticate(existingUser);
-
-        return token;
+        return jwtManagerRepository.Authenticate(existingUser);
     }
 
     public Tokens? RegisterUser(string username, string password){
@@ -42,7 +40,6 @@ public class LoginFunctions {
         var newUser = new User {
             Username = username,
             Password = passwordHasher.HashPass(password),
-            RoleId = 1
         };
 
 

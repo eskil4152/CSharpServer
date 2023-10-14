@@ -59,7 +59,7 @@ public class PeopleController : Controller {
     {
         var res = personFunctions.GetPersonById(content.id);
 
-        if (res.count == 0)
+        if (res.Count == 0)
         {
             return NotFound();
         }

@@ -11,13 +11,14 @@ public class JwtManagerRepository : IJWTManagerRepository {
     }
 
     public Tokens Authenticate(User user){
+
         var tokenHandler = new JwtSecurityTokenHandler();
 		var tokenKey = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!);
-		var tokenDescriptor = new SecurityTokenDescriptor {
-		  Subject = new ClaimsIdentity(new Claim[]
-		  {
-			 new(ClaimTypes.Name, user.Username),
-             new(ClaimTypes.Role, user.Role.Name)  
+        var tokenDescriptor = new SecurityTokenDescriptor {
+            Subject = new ClaimsIdentity(new Claim[]
+          {
+             new(ClaimTypes.Name, user.Username),
+             new("AuthorizationLevel", user.AuthorizationLevel.ToString())
 		  }),
 		   Expires = DateTime.UtcNow.AddMinutes(10),
 		   SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey),SecurityAlgorithms.HmacSha256)
@@ -27,7 +28,7 @@ public class JwtManagerRepository : IJWTManagerRepository {
 		return new Tokens { Token = tokenHandler.WriteToken(token) };
     }
 
-    public bool CheckTokenAuthorization(string token, string requiredRole) {
+    public bool Authorize(string token, int requiredAuthorizationLevel) {
         var handler = new JwtSecurityTokenHandler();
 
         try
@@ -36,14 +37,22 @@ public class JwtManagerRepository : IJWTManagerRepository {
             {
                 var claims = jsonToken.Claims;
 
-                // Check if the required role claim exists in the token
-                if (claims.Any(c => c.Type == ClaimTypes.Role && c.Value == requiredRole))
+                var authorityLevelClaim = claims.FirstOrDefault(c => c.Type == "AuthorizationLevel");
+                if (authorityLevelClaim != null && int.TryParse(authorityLevelClaim.Value, out int userAuthorityLevel))
                 {
-                    return true;
+                    if (userAuthorityLevel >= requiredAuthorizationLevel)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        System.Console.WriteLine("User does not have the required authorization level.");
+                        return false;
+                    }
                 }
                 else
                 {
-                    System.Console.WriteLine("User does not have the required role.");
+                    System.Console.WriteLine("Authorization level claim not found or invalid.");
                     return false;
                 }
             }
