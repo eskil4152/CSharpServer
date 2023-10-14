@@ -1,8 +1,8 @@
 # CSharpServer
 
-REST API written in C#, with .NET ASP. Fetches from PostgreSQL database hosted on Azure.
+REST API written in C#, with .NET ASP. Handles requests from ReactClient.
 
-Fetches all from database.
+Connects to PostgreSQL database on Azure.
 
 Fetches by firstname, lastname, fullname and id from database.
 Can delete person from database with id
