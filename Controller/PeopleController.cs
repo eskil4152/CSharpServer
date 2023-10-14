@@ -5,7 +5,11 @@ using Microsoft.EntityFrameworkCore;
 [Route("api/people")]
 public class PeopleController : Controller {
     private readonly PersonFunctions personFunctions;
-    public record HttpContent(string? id, string? firstName, string? lastName);
+
+    public record HttpId(string id);
+    public record HttpFirstName(string firstName);
+    public record HttpLastName(string lastName);
+    public record HttpFullname(string firstName, string lastName);
 
     public PeopleController(PersonFunctions personFunctions) {
         this.personFunctions = personFunctions;
@@ -23,7 +27,7 @@ public class PeopleController : Controller {
     }
 
     [HttpPost("search/first")]
-    public IActionResult GetPeopleByFirstName([FromBody] HttpContent content){
+    public IActionResult GetPeopleByFirstName([FromBody] HttpFirstName content){
         var res = personFunctions.GetPersonByFirstName(content.firstName);
 
         if (res.Count == 0) {
@@ -33,7 +37,7 @@ public class PeopleController : Controller {
     }
 
     [HttpPost("search/last")]
-    public IActionResult GetPeopleByLastName([FromBody] HttpContent content)
+    public IActionResult GetPeopleByLastName([FromBody] HttpLastName content)
     {
         var res = personFunctions.GetPersonByLastName(content.lastName);
 
@@ -44,7 +48,7 @@ public class PeopleController : Controller {
     }
 
     [HttpPost("search/full")]
-    public IActionResult GetPeopleByFullName([FromBody] HttpContent content)
+    public IActionResult GetPeopleByFullName([FromBody] HttpFullname content)
     {
         var res = personFunctions.GetPersonByFullName(content.firstName, content.lastName);
 
@@ -56,10 +60,8 @@ public class PeopleController : Controller {
     }
 
     [HttpPost("search/id")]
-    public IActionResult GetPeopleById([FromBody] HttpContent content)
+    public IActionResult GetPeopleById([FromBody] HttpId content)
     {
-        Console.WriteLine("Recieved request");
-
         _ = long.TryParse(content.id, out long id);
 
         var res = personFunctions.GetPersonById(id);
@@ -86,5 +88,21 @@ public class PeopleController : Controller {
         } else {
             return StatusCode(500);
         }
+    }
+
+    [HttpDelete("delete")]
+    public IActionResult DeletePerson([FromBody] HttpId content)
+    {
+        _ = long.TryParse(content.id, out long id);
+
+        var authorizationHeader = HttpContext.Request.Headers["Authorization"].ToString();
+        var token = authorizationHeader.Replace("Bearer: ", "");
+
+        var res = personFunctions.DeletePerson(id, token);
+
+        if (res == 200)
+            return NoContent();
+
+        return Unauthorized();
     }
 }

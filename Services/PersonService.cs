@@ -56,4 +56,22 @@ public class PersonFunctions {
 
         return 401;
     }
+
+    public int DeletePerson(long id, string token)
+    {
+        bool isAuthorized = jwtManagerRepository.Authorize(token, 3);
+
+        if (isAuthorized)
+        {
+            var person = dbContext.people
+            .FirstOrDefault(person => person.Id == id);
+
+            dbContext.people.Remove(person!);
+            dbContext.SaveChanges();
+
+            return 200;
+        }
+
+        return 401;
+    }
 }
