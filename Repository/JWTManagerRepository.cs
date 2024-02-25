@@ -15,7 +15,7 @@ public class JwtManagerRepository : IJWTManagerRepository {
         var tokenHandler = new JwtSecurityTokenHandler();
 		var tokenKey = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!);
         var tokenDescriptor = new SecurityTokenDescriptor {
-            Subject = new ClaimsIdentity(new Claim[]
+            Subject = new ClaimsIdentity(new Claim
           {
              new(ClaimTypes.Name, user.Username),
              new("AuthorizationLevel", user.AuthorizationLevel.ToString())

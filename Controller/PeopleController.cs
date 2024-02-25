@@ -100,8 +100,9 @@ public class PeopleController : Controller {
 
         var res = personFunctions.DeletePerson(id, token);
 
-        if (res == 200)
+        if (res == 200){
             return NoContent();
+        }
 
         return Unauthorized();
     }
