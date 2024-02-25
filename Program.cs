@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 
-class Program
+protected class Program
 {
     public static void Main(string[] args)
     {
