@@ -1,3 +1,5 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/6062a5a6560c4229ba25061d495231b6)](https://app.codacy.com/gh/eskil4152/CSharpServer/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 # CSharpServer
 
 REST API written in C#, with .NET ASP. Handles requests from ReactClient.
